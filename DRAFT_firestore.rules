@@ -1,0 +1,478 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Hardened Global Primitives
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+    function incoming() {
+      return request.resource.data;
+    }
+    function existing() {
+      return resource.data;
+    }
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    function isAdmin() {
+      return isVerified() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        request.auth.token.email == 'developpementistes@gmail.com'
+      );
+    }
+
+    // 3. Entity Validation Blueprints
+    function isValidPublicProfile(data) {
+      return data.keys().hasAll([
+        'uid', 'aliasCode', 'role', 'titleFr', 'titleAr', 'city',
+        'experienceYears', 'availability', 'skills', 'bioSummary',
+        'isPremium', 'subscriptionPlan', 'dailyRateMad', 'verified',
+        'createdAt', 'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'uid', 'aliasCode', 'role', 'titleFr', 'titleAr', 'city',
+        'experienceYears', 'availability', 'skills', 'bioSummary',
+        'isPremium', 'subscriptionPlan', 'dailyRateMad', 'verified',
+        'createdAt', 'updatedAt'
+      ]) &&
+      data.uid is string && data.uid.size() <= 128 && data.uid.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.aliasCode is string && data.aliasCode.size() >= 3 && data.aliasCode.size() <= 40 &&
+      data.role is string && data.role in ['candidate', 'recruiter', 'admin'] &&
+      data.titleFr is string && data.titleFr.size() >= 2 && data.titleFr.size() <= 120 &&
+      data.titleAr is string && data.titleAr.size() >= 2 && data.titleAr.size() <= 120 &&
+      data.city is string && data.city.size() >= 2 && data.city.size() <= 60 &&
+      data.experienceYears is number && data.experienceYears >= 0 && data.experienceYears <= 60 &&
+      data.availability is string && data.availability in ['immediate', 'notice_15d', 'on_mission'] &&
+      data.skills is list && data.skills.size() <= 15 && (data.skills.size() == 0 || (data.skills[0] is string && data.skills[0].size() <= 60)) &&
+      data.bioSummary is string && data.bioSummary.size() >= 5 && data.bioSummary.size() <= 600 &&
+      data.isPremium is bool &&
+      data.subscriptionPlan is string && data.subscriptionPlan in ['free', 'pro_candidate', 'pro_recruiter', 'enterprise'] &&
+      data.dailyRateMad is number && data.dailyRateMad >= 0 && data.dailyRateMad <= 100000 &&
+      data.verified is bool &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    function isValidUserPII(data) {
+      return data.keys().hasAll([
+        'uid', 'fullName', 'email', 'phone', 'cinOrIce',
+        'companyLegalName', 'exactAddress', 'createdAt', 'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'uid', 'fullName', 'email', 'phone', 'cinOrIce',
+        'companyLegalName', 'exactAddress', 'createdAt', 'updatedAt'
+      ]) &&
+      data.uid is string && data.uid.size() <= 128 && data.uid.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.fullName is string && data.fullName.size() >= 2 && data.fullName.size() <= 100 &&
+      data.email is string && data.email.size() >= 3 && data.email.size() <= 120 &&
+      data.phone is string && data.phone.size() >= 6 && data.phone.size() <= 30 &&
+      data.cinOrIce is string && data.cinOrIce.size() >= 4 && data.cinOrIce.size() <= 40 &&
+      data.companyLegalName is string && data.companyLegalName.size() >= 1 && data.companyLegalName.size() <= 120 &&
+      data.exactAddress is string && data.exactAddress.size() >= 3 && data.exactAddress.size() <= 250 &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    function isValidJobOffer(data) {
+      return data.keys().hasAll([
+        'recruiterId', 'recruiterAlias', 'titleFr', 'titleAr', 'sector',
+        'city', 'contractType', 'durationWeeks', 'salaryMad', 'requiredSkills',
+        'descriptionFr', 'descriptionAr', 'isPriority', 'status',
+        'createdAt', 'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'recruiterId', 'recruiterAlias', 'titleFr', 'titleAr', 'sector',
+        'city', 'contractType', 'durationWeeks', 'salaryMad', 'requiredSkills',
+        'descriptionFr', 'descriptionAr', 'isPriority', 'status',
+        'createdAt', 'updatedAt'
+      ]) &&
+      data.recruiterId is string && data.recruiterId.size() <= 128 && data.recruiterId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.recruiterAlias is string && data.recruiterAlias.size() >= 3 && data.recruiterAlias.size() <= 40 &&
+      data.titleFr is string && data.titleFr.size() >= 3 && data.titleFr.size() <= 120 &&
+      data.titleAr is string && data.titleAr.size() >= 3 && data.titleAr.size() <= 120 &&
+      data.sector is string && data.sector.size() >= 2 && data.sector.size() <= 60 &&
+      data.city is string && data.city.size() >= 2 && data.city.size() <= 60 &&
+      data.contractType is string && data.contractType in ['interim_mission', 'cdd_interim', 'pre_embauche'] &&
+      data.durationWeeks is number && data.durationWeeks >= 1 && data.durationWeeks <= 104 &&
+      data.salaryMad is number && data.salaryMad >= 1000 && data.salaryMad <= 500000 &&
+      data.requiredSkills is list && data.requiredSkills.size() <= 15 && (data.requiredSkills.size() == 0 || (data.requiredSkills[0] is string && data.requiredSkills[0].size() <= 60)) &&
+      data.descriptionFr is string && data.descriptionFr.size() >= 10 && data.descriptionFr.size() <= 1000 &&
+      data.descriptionAr is string && data.descriptionAr.size() >= 10 && data.descriptionAr.size() <= 1000 &&
+      data.isPriority is bool &&
+      data.status is string && data.status in ['open', 'filled', 'closed'] &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    function isValidApplication(data) {
+      return data.keys().hasAll([
+        'jobId', 'jobTitleFr', 'jobTitleAr', 'candidateId', 'candidateAlias',
+        'recruiterId', 'recruiterAlias', 'matchScore', 'isPriority',
+        'status', 'coverNote', 'createdAt', 'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'jobId', 'jobTitleFr', 'jobTitleAr', 'candidateId', 'candidateAlias',
+        'recruiterId', 'recruiterAlias', 'matchScore', 'isPriority',
+        'status', 'coverNote', 'createdAt', 'updatedAt'
+      ]) &&
+      data.jobId is string && data.jobId.size() <= 128 && data.jobId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.jobTitleFr is string && data.jobTitleFr.size() >= 2 && data.jobTitleFr.size() <= 120 &&
+      data.jobTitleAr is string && data.jobTitleAr.size() >= 2 && data.jobTitleAr.size() <= 120 &&
+      data.candidateId is string && data.candidateId.size() <= 128 && data.candidateId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.candidateAlias is string && data.candidateAlias.size() >= 3 && data.candidateAlias.size() <= 40 &&
+      data.recruiterId is string && data.recruiterId.size() <= 128 && data.recruiterId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.recruiterAlias is string && data.recruiterAlias.size() >= 3 && data.recruiterAlias.size() <= 40 &&
+      data.matchScore is number && data.matchScore >= 0 && data.matchScore <= 100 &&
+      data.isPriority is bool &&
+      data.status is string && data.status in ['pending', 'shortlisted', 'interview', 'hired', 'rejected'] &&
+      data.coverNote is string && data.coverNote.size() >= 2 && data.coverNote.size() <= 500 &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    function isValidChatThread(data) {
+      return data.keys().hasAll([
+        'jobId', 'jobTitleFr', 'candidateId', 'candidateAlias',
+        'recruiterId', 'recruiterAlias', 'lastMessagePreview',
+        'status', 'createdAt', 'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'jobId', 'jobTitleFr', 'candidateId', 'candidateAlias',
+        'recruiterId', 'recruiterAlias', 'lastMessagePreview',
+        'status', 'createdAt', 'updatedAt'
+      ]) &&
+      data.jobId is string && data.jobId.size() <= 128 && data.jobId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.jobTitleFr is string && data.jobTitleFr.size() >= 2 && data.jobTitleFr.size() <= 120 &&
+      data.candidateId is string && data.candidateId.size() <= 128 && data.candidateId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.candidateAlias is string && data.candidateAlias.size() >= 3 && data.candidateAlias.size() <= 40 &&
+      data.recruiterId is string && data.recruiterId.size() <= 128 && data.recruiterId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.recruiterAlias is string && data.recruiterAlias.size() >= 3 && data.recruiterAlias.size() <= 40 &&
+      data.lastMessagePreview is string && data.lastMessagePreview.size() >= 1 && data.lastMessagePreview.size() <= 200 &&
+      data.status is string && data.status in ['active', 'archived'] &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    function isValidChatMessage(data) {
+      return data.keys().hasAll([
+        'threadId', 'senderId', 'senderAlias', 'content', 'redactedFlag', 'createdAt'
+      ]) &&
+      data.keys().hasOnly([
+        'threadId', 'senderId', 'senderAlias', 'content', 'redactedFlag', 'createdAt'
+      ]) &&
+      data.threadId is string && data.threadId.size() <= 128 && data.threadId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.senderId is string && data.senderId.size() <= 128 && data.senderId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.senderAlias is string && data.senderAlias.size() >= 3 && data.senderAlias.size() <= 40 &&
+      data.content is string && data.content.size() >= 1 && data.content.size() <= 500 &&
+      data.redactedFlag is bool &&
+      data.createdAt is timestamp;
+    }
+
+    function isValidSubscriptionRecord(data) {
+      return data.keys().hasAll([
+        'userId', 'userAlias', 'planId', 'amountMad', 'billingCycle',
+        'status', 'paymentMethodLast4', 'createdAt', 'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'userId', 'userAlias', 'planId', 'amountMad', 'billingCycle',
+        'status', 'paymentMethodLast4', 'createdAt', 'updatedAt'
+      ]) &&
+      data.userId is string && data.userId.size() <= 128 && data.userId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.userAlias is string && data.userAlias.size() >= 3 && data.userAlias.size() <= 40 &&
+      data.planId is string && data.planId in ['pro_candidate', 'pro_recruiter', 'enterprise'] &&
+      data.amountMad is number && data.amountMad >= 0 && data.amountMad <= 100000 &&
+      data.billingCycle is string && data.billingCycle in ['monthly'] &&
+      data.status is string && data.status in ['active', 'cancelled'] &&
+      data.paymentMethodLast4 is string && data.paymentMethodLast4.size() == 4 && data.paymentMethodLast4.matches('^[0-9]{4}$') &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    function isValidPushNotification(data) {
+      return data.keys().hasAll([
+        'recipientId', 'senderId', 'titleFr', 'titleAr', 'bodyFr', 'bodyAr',
+        'category', 'read', 'createdAt', 'updatedAt'
+      ]) &&
+      data.keys().hasOnly([
+        'recipientId', 'senderId', 'titleFr', 'titleAr', 'bodyFr', 'bodyAr',
+        'category', 'read', 'createdAt', 'updatedAt'
+      ]) &&
+      data.recipientId is string && data.recipientId.size() <= 128 && data.recipientId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.senderId is string && data.senderId.size() <= 128 && data.senderId.matches('^[a-zA-Z0-9_\\-]+$') &&
+      data.titleFr is string && data.titleFr.size() >= 2 && data.titleFr.size() <= 100 &&
+      data.titleAr is string && data.titleAr.size() >= 2 && data.titleAr.size() <= 100 &&
+      data.bodyFr is string && data.bodyFr.size() >= 2 && data.bodyFr.size() <= 250 &&
+      data.bodyAr is string && data.bodyAr.size() >= 2 && data.bodyAr.size() <= 250 &&
+      data.category is string && data.category in ['match', 'application', 'message', 'subscription'] &&
+      data.read is bool &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    // 4. Collection Rules
+    match /admins/{adminId} {
+      allow get: if isValidId(adminId) && (isOwner(adminId) || isAdmin());
+      allow list: if isAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /public_profiles/{userId} {
+      allow get: if isSignedIn() && isValidId(userId);
+      allow list: if isSignedIn() && existing().role in ['candidate', 'recruiter', 'admin'];
+      allow create: if isVerified() && isValidId(userId) && isValidPublicProfile(incoming()) &&
+        incoming().uid == userId &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        (
+          (isOwner(userId) && (incoming().role in ['candidate', 'recruiter'] || isAdmin())) ||
+          isAdmin()
+        );
+      allow update: if isVerified() && isValidId(userId) && isValidPublicProfile(incoming()) && (
+        isAdmin() ||
+        (
+          isOwner(userId) &&
+          incoming().uid == existing().uid &&
+          incoming().role == existing().role &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly([
+            'titleFr', 'titleAr', 'city', 'experienceYears', 'availability',
+            'skills', 'bioSummary', 'isPremium', 'subscriptionPlan',
+            'dailyRateMad', 'updatedAt'
+          ])
+        )
+      );
+      allow delete: if isValidId(userId) && isAdmin();
+    }
+
+    match /user_pii/{userId} {
+      // Strictly isolated PII Vault: ONLY owner or admin can read
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if isAdmin() || (isSignedIn() && existing().uid == request.auth.uid);
+      allow create: if isVerified() && isValidId(userId) && isValidUserPII(incoming()) &&
+        incoming().uid == userId &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        (isOwner(userId) || isAdmin());
+      allow update: if isVerified() && isValidId(userId) && isValidUserPII(incoming()) && (
+        isAdmin() ||
+        (
+          isOwner(userId) &&
+          incoming().uid == existing().uid &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly([
+            'fullName', 'email', 'phone', 'cinOrIce',
+            'companyLegalName', 'exactAddress', 'updatedAt'
+          ])
+        )
+      );
+      allow delete: if isValidId(userId) && isAdmin();
+    }
+
+    match /jobs/{jobId} {
+      allow get: if isSignedIn() && isValidId(jobId);
+      allow list: if isSignedIn() && existing().status in ['open', 'filled', 'closed'];
+      allow create: if isVerified() && isValidId(jobId) && isValidJobOffer(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        (incoming().recruiterId == request.auth.uid || isAdmin()) &&
+        exists(/databases/$(database)/documents/public_profiles/$(incoming().recruiterId));
+      allow update: if isVerified() && isValidId(jobId) && isValidJobOffer(incoming()) && (
+        isAdmin() ||
+        (
+          existing().recruiterId == request.auth.uid &&
+          existing().status != 'closed' &&
+          incoming().recruiterId == existing().recruiterId &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly([
+            'titleFr', 'titleAr', 'sector', 'city', 'contractType',
+            'durationWeeks', 'salaryMad', 'requiredSkills', 'descriptionFr',
+            'descriptionAr', 'isPriority', 'status', 'updatedAt'
+          ])
+        )
+      );
+      allow delete: if isValidId(jobId) && isAdmin();
+    }
+
+    match /applications/{applicationId} {
+      allow get: if isSignedIn() && isValidId(applicationId) && (
+        existing().candidateId == request.auth.uid ||
+        existing().recruiterId == request.auth.uid ||
+        isAdmin()
+      );
+      allow list: if isSignedIn() && (
+        existing().candidateId == request.auth.uid ||
+        existing().recruiterId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isVerified() && isValidId(applicationId) && isValidApplication(incoming()) &&
+        incoming().status == 'pending' &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        (incoming().candidateId == request.auth.uid || isAdmin()) &&
+        exists(/databases/$(database)/documents/jobs/$(incoming().jobId));
+      allow update: if isVerified() && isValidId(applicationId) && isValidApplication(incoming()) && (
+        isAdmin() ||
+        (
+          // Action 1: Recruiter updates application status
+          existing().recruiterId == request.auth.uid &&
+          !(existing().status in ['hired', 'rejected']) &&
+          incoming().jobId == existing().jobId &&
+          incoming().candidateId == existing().candidateId &&
+          incoming().recruiterId == existing().recruiterId &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt'])
+        ) ||
+        (
+          // Action 2: Candidate updates coverNote or priority while pending
+          existing().candidateId == request.auth.uid &&
+          existing().status == 'pending' &&
+          incoming().jobId == existing().jobId &&
+          incoming().candidateId == existing().candidateId &&
+          incoming().recruiterId == existing().recruiterId &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['coverNote', 'isPriority', 'updatedAt'])
+        )
+      );
+      allow delete: if isValidId(applicationId) && isAdmin();
+    }
+
+    match /chats/{threadId} {
+      allow get: if isSignedIn() && isValidId(threadId) && (
+        existing().candidateId == request.auth.uid ||
+        existing().recruiterId == request.auth.uid ||
+        isAdmin()
+      );
+      allow list: if isSignedIn() && (
+        existing().candidateId == request.auth.uid ||
+        existing().recruiterId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isVerified() && isValidId(threadId) && isValidChatThread(incoming()) &&
+        incoming().status == 'active' &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        (
+          incoming().candidateId == request.auth.uid ||
+          incoming().recruiterId == request.auth.uid ||
+          isAdmin()
+        ) &&
+        exists(/databases/$(database)/documents/jobs/$(incoming().jobId));
+      allow update: if isVerified() && isValidId(threadId) && isValidChatThread(incoming()) && (
+        isAdmin() ||
+        (
+          (existing().candidateId == request.auth.uid || existing().recruiterId == request.auth.uid) &&
+          existing().status == 'active' &&
+          incoming().jobId == existing().jobId &&
+          incoming().candidateId == existing().candidateId &&
+          incoming().recruiterId == existing().recruiterId &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['lastMessagePreview', 'status', 'updatedAt'])
+        )
+      );
+      allow delete: if isValidId(threadId) && isAdmin();
+
+      // Master Gate Subcollection: Messages
+      match /messages/{messageId} {
+        function getParentThread() {
+          return get(/databases/$(database)/documents/chats/$(threadId)).data;
+        }
+        function isThreadParticipant() {
+          let parent = getParentThread();
+          return parent.candidateId == request.auth.uid || parent.recruiterId == request.auth.uid;
+        }
+
+        allow get: if isSignedIn() && isValidId(threadId) && isValidId(messageId) && (
+          isThreadParticipant() || isAdmin()
+        );
+        allow list: if isSignedIn() && isValidId(threadId) && (
+          isAdmin() ||
+          existing().senderId == request.auth.uid ||
+          isThreadParticipant()
+        );
+        allow create: if isVerified() && isValidId(threadId) && isValidId(messageId) &&
+          isValidChatMessage(incoming()) &&
+          incoming().threadId == threadId &&
+          incoming().createdAt == request.time &&
+          (
+            isAdmin() ||
+            (
+              incoming().senderId == request.auth.uid &&
+              getParentThread().status == 'active' &&
+              isThreadParticipant()
+            )
+          );
+        allow update, delete: if isValidId(threadId) && isValidId(messageId) && isAdmin();
+      }
+    }
+
+    match /subscriptions/{subscriptionId} {
+      allow get: if isSignedIn() && isValidId(subscriptionId) && (
+        existing().userId == request.auth.uid || isAdmin()
+      );
+      allow list: if isSignedIn() && (
+        existing().userId == request.auth.uid || isAdmin()
+      );
+      allow create: if isVerified() && isValidId(subscriptionId) && isValidSubscriptionRecord(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        (incoming().userId == request.auth.uid || isAdmin()) &&
+        exists(/databases/$(database)/documents/public_profiles/$(incoming().userId));
+      allow update: if isVerified() && isValidId(subscriptionId) && isValidSubscriptionRecord(incoming()) && (
+        isAdmin() ||
+        (
+          existing().userId == request.auth.uid &&
+          existing().status != 'cancelled' &&
+          incoming().userId == existing().userId &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['status', 'planId', 'amountMad', 'updatedAt'])
+        )
+      );
+      allow delete: if isValidId(subscriptionId) && isAdmin();
+    }
+
+    match /notifications/{notificationId} {
+      allow get: if isSignedIn() && isValidId(notificationId) && (
+        existing().recipientId == request.auth.uid || isAdmin()
+      );
+      allow list: if isSignedIn() && (
+        existing().recipientId == request.auth.uid || isAdmin()
+      );
+      allow create: if isVerified() && isValidId(notificationId) && isValidPushNotification(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        (incoming().senderId == request.auth.uid || isAdmin()) &&
+        exists(/databases/$(database)/documents/public_profiles/$(incoming().recipientId));
+      allow update: if isVerified() && isValidId(notificationId) && isValidPushNotification(incoming()) && (
+        isAdmin() ||
+        (
+          existing().recipientId == request.auth.uid &&
+          incoming().recipientId == existing().recipientId &&
+          incoming().senderId == existing().senderId &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().updatedAt == request.time &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['read', 'updatedAt'])
+        )
+      );
+      allow delete: if isValidId(notificationId) && isAdmin();
+    }
+  }
+}

@@ -1,0 +1,681 @@
+{
+  "entities": {
+    "PublicProfile": {
+      "title": "PublicProfile",
+      "description": "Anonymized public profile for candidates, recruiters, and admins without PII.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the user."
+        },
+        "aliasCode": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 40,
+          "description": "Anonymized code (e.g., CAND-8492 or REC-3019)."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["candidate", "recruiter", "admin"],
+          "description": "User role on the platform."
+        },
+        "titleFr": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120,
+          "description": "Job title or sector in French."
+        },
+        "titleAr": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120,
+          "description": "Job title or sector in Arabic."
+        },
+        "city": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 60,
+          "description": "Moroccan city (e.g., Casablanca, Tanger, Rabat)."
+        },
+        "experienceYears": {
+          "type": "number",
+          "description": "Years of professional experience."
+        },
+        "availability": {
+          "type": "string",
+          "enum": ["immediate", "notice_15d", "on_mission"],
+          "description": "Current availability status."
+        },
+        "skills": {
+          "type": "array",
+          "description": "List of professional skills (up to 15)."
+        },
+        "bioSummary": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 600,
+          "description": "Anonymized professional summary without contact details."
+        },
+        "isPremium": {
+          "type": "boolean",
+          "description": "Whether the user has an active premium subscription."
+        },
+        "subscriptionPlan": {
+          "type": "string",
+          "enum": ["free", "pro_candidate", "pro_recruiter", "enterprise"],
+          "description": "Active subscription tier."
+        },
+        "dailyRateMad": {
+          "type": "number",
+          "description": "Indicative daily rate in MAD."
+        },
+        "verified": {
+          "type": "boolean",
+          "description": "Whether profile was vetted by Mouna Emploi agency."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation server timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update server timestamp."
+        }
+      },
+      "required": [
+        "uid",
+        "aliasCode",
+        "role",
+        "titleFr",
+        "titleAr",
+        "city",
+        "experienceYears",
+        "availability",
+        "skills",
+        "bioSummary",
+        "isPremium",
+        "subscriptionPlan",
+        "dailyRateMad",
+        "verified",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "UserPII": {
+      "title": "UserPII",
+      "description": "Strictly isolated Personally Identifiable Information accessible ONLY to the owner and platform administrators.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "User UID."
+        },
+        "fullName": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100,
+          "description": "Legal full name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "minLength": 3,
+          "maxLength": 120,
+          "description": "Personal or corporate email address."
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 30,
+          "description": "Moroccan phone number (+212...)."
+        },
+        "cinOrIce": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 40,
+          "description": "National ID (CIN) for candidates or Company ICE for recruiters."
+        },
+        "companyLegalName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Legal company name for recruiters or N/A for candidates."
+        },
+        "exactAddress": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 250,
+          "description": "Residential or headquarters physical address."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation server timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Update server timestamp."
+        }
+      },
+      "required": [
+        "uid",
+        "fullName",
+        "email",
+        "phone",
+        "cinOrIce",
+        "companyLegalName",
+        "exactAddress",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "JobOffer": {
+      "title": "JobOffer",
+      "description": "Interim job mission published by a recruiter with anonymized company identity.",
+      "type": "object",
+      "properties": {
+        "recruiterId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "UID of the recruiter who created the offer."
+        },
+        "recruiterAlias": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 40,
+          "description": "Anonymized recruiter code (e.g., REC-4021)."
+        },
+        "titleFr": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 120,
+          "description": "Mission title in French."
+        },
+        "titleAr": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 120,
+          "description": "Mission title in Arabic."
+        },
+        "sector": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 60,
+          "description": "Industry sector (BTP, Logistique, Automobile, IT, Agroalimentaire, etc.)."
+        },
+        "city": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 60,
+          "description": "Mission city in Morocco."
+        },
+        "contractType": {
+          "type": "string",
+          "enum": ["interim_mission", "cdd_interim", "pre_embauche"],
+          "description": "Type of interim contract."
+        },
+        "durationWeeks": {
+          "type": "number",
+          "description": "Mission duration in weeks."
+        },
+        "salaryMad": {
+          "type": "number",
+          "description": "Monthly net salary or package in MAD."
+        },
+        "requiredSkills": {
+          "type": "array",
+          "description": "Required skills for smart matching (up to 15)."
+        },
+        "descriptionFr": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 1000,
+          "description": "Anonymized job description in French."
+        },
+        "descriptionAr": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 1000,
+          "description": "Anonymized job description in Arabic."
+        },
+        "isPriority": {
+          "type": "boolean",
+          "description": "Priority placement boosted by premium subscription."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["open", "filled", "closed"],
+          "description": "Current status of the offer."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation server timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update server timestamp."
+        }
+      },
+      "required": [
+        "recruiterId",
+        "recruiterAlias",
+        "titleFr",
+        "titleAr",
+        "sector",
+        "city",
+        "contractType",
+        "durationWeeks",
+        "salaryMad",
+        "requiredSkills",
+        "descriptionFr",
+        "descriptionAr",
+        "isPriority",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Application": {
+      "title": "Application",
+      "description": "Candidate application to an interim mission with real-time workflow tracking.",
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "ID of the JobOffer."
+        },
+        "jobTitleFr": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120,
+          "description": "Job title in French."
+        },
+        "jobTitleAr": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120,
+          "description": "Job title in Arabic."
+        },
+        "candidateId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "UID of the candidate."
+        },
+        "candidateAlias": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 40,
+          "description": "Anonymized candidate alias."
+        },
+        "recruiterId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "UID of the recruiter."
+        },
+        "recruiterAlias": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 40,
+          "description": "Anonymized recruiter alias."
+        },
+        "matchScore": {
+          "type": "number",
+          "description": "Calculated skill match percentage (0-100)."
+        },
+        "isPriority": {
+          "type": "boolean",
+          "description": "Whether candidate applied with priority premium boost."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "shortlisted", "interview", "hired", "rejected"],
+          "description": "Application stage."
+        },
+        "coverNote": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 500,
+          "description": "Anonymized motivation note."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Application creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Application update timestamp."
+        }
+      },
+      "required": [
+        "jobId",
+        "jobTitleFr",
+        "jobTitleAr",
+        "candidateId",
+        "candidateAlias",
+        "recruiterId",
+        "recruiterAlias",
+        "matchScore",
+        "isPriority",
+        "status",
+        "coverNote",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ChatThread": {
+      "title": "ChatThread",
+      "description": "Anonymized real-time messaging channel between a recruiter and a candidate.",
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Related job offer ID."
+        },
+        "jobTitleFr": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120,
+          "description": "Related job title in French."
+        },
+        "candidateId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "UID of candidate participant."
+        },
+        "candidateAlias": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 40,
+          "description": "Candidate alias code."
+        },
+        "recruiterId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "UID of recruiter participant."
+        },
+        "recruiterAlias": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 40,
+          "description": "Recruiter alias code."
+        },
+        "lastMessagePreview": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "Sanitized preview of the latest message."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "archived"],
+          "description": "Thread status."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Thread creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last message timestamp."
+        }
+      },
+      "required": [
+        "jobId",
+        "jobTitleFr",
+        "candidateId",
+        "candidateAlias",
+        "recruiterId",
+        "recruiterAlias",
+        "lastMessagePreview",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Sanitized message inside a ChatThread with automatic PII redaction.",
+      "type": "object",
+      "properties": {
+        "threadId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Parent ChatThread ID."
+        },
+        "senderId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "UID of the message sender."
+        },
+        "senderAlias": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 40,
+          "description": "Anonymized alias of sender."
+        },
+        "content": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Message body (redacted of any phone/email PII)."
+        },
+        "redactedFlag": {
+          "type": "boolean",
+          "description": "True if automatic anti-PII filter masked contact info."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Message server timestamp."
+        }
+      },
+      "required": [
+        "threadId",
+        "senderId",
+        "senderAlias",
+        "content",
+        "redactedFlag",
+        "createdAt"
+      ]
+    },
+    "SubscriptionRecord": {
+      "title": "SubscriptionRecord",
+      "description": "Recurring monthly subscription payment record.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Subscriber UID."
+        },
+        "userAlias": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 40,
+          "description": "Subscriber alias."
+        },
+        "planId": {
+          "type": "string",
+          "enum": ["pro_candidate", "pro_recruiter", "enterprise"],
+          "description": "Subscribed plan identifier."
+        },
+        "amountMad": {
+          "type": "number",
+          "description": "Monthly recurring amount in MAD."
+        },
+        "billingCycle": {
+          "type": "string",
+          "enum": ["monthly"],
+          "description": "Billing cycle."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "cancelled"],
+          "description": "Subscription status."
+        },
+        "paymentMethodLast4": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 4,
+          "pattern": "^[0-9]{4}$",
+          "description": "Last 4 digits of payment card."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Subscription start timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last billing update timestamp."
+        }
+      },
+      "required": [
+        "userId",
+        "userAlias",
+        "planId",
+        "amountMad",
+        "billingCycle",
+        "status",
+        "paymentMethodLast4",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PushNotification": {
+      "title": "PushNotification",
+      "description": "Real-time targeted push notification for a user.",
+      "type": "object",
+      "properties": {
+        "recipientId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "UID of the user receiving the notification."
+        },
+        "senderId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "UID of the user triggering the notification."
+        },
+        "titleFr": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100,
+          "description": "Notification title in French."
+        },
+        "titleAr": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100,
+          "description": "Notification title in Arabic."
+        },
+        "bodyFr": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 250,
+          "description": "Notification body in French."
+        },
+        "bodyAr": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 250,
+          "description": "Notification body in Arabic."
+        },
+        "category": {
+          "type": "string",
+          "enum": ["match", "application", "message", "subscription"],
+          "description": "Notification type."
+        },
+        "read": {
+          "type": "boolean",
+          "description": "Whether the user has read the notification."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation server timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Update server timestamp."
+        }
+      },
+      "required": [
+        "recipientId",
+        "senderId",
+        "titleFr",
+        "titleAr",
+        "bodyFr",
+        "bodyAr",
+        "category",
+        "read",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/public_profiles/{userId}": {
+      "schema": { "$ref": "#/entities/PublicProfile" },
+      "description": "Anonymized public profiles readable by signed-in users for skill matching."
+    },
+    "/user_pii/{userId}": {
+      "schema": { "$ref": "#/entities/UserPII" },
+      "description": "Strictly isolated PII vault accessible ONLY to the document owner or platform administrators."
+    },
+    "/jobs/{jobId}": {
+      "schema": { "$ref": "#/entities/JobOffer" },
+      "description": "Interim job offers posted by recruiters."
+    },
+    "/applications/{applicationId}": {
+      "schema": { "$ref": "#/entities/Application" },
+      "description": "Candidate applications to job offers."
+    },
+    "/chats/{threadId}": {
+      "schema": { "$ref": "#/entities/ChatThread" },
+      "description": "Anonymized chat threads between a candidate and a recruiter."
+    },
+    "/chats/{threadId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Individual sanitized messages within a chat thread."
+    },
+    "/subscriptions/{subscriptionId}": {
+      "schema": { "$ref": "#/entities/SubscriptionRecord" },
+      "description": "Monthly recurring subscription records."
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/PushNotification" },
+      "description": "Real-time push notifications for users."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Mouna Emploi | منى تشغيل",
+  "description": "Agence d'emploi d'intérim marocaine bilingue avec gestion des profils, offres en temps réel, messagerie anonymisée, notifications push et tableau de bord analytique.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
