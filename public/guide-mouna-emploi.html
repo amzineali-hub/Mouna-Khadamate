@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الدليل الشامل لمنصة منى تشغيل | Mouna Emploi — PDF / DOC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brown-dark: #2A1408;
+      --brown-main: #542B14;
+      --brown-accent: #8B4A24;
+      --gold: #FCD34D;
+      --green-wa: #16A34A;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #F8F5F2;
+      color: #2A1408;
+      margin: 0;
+      padding: 0;
+      line-height: 1.8;
+    }
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: linear-gradient(180deg, #542B14 0%, #3E1F0E 100%);
+      color: #FFFFFF;
+      padding: 14px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 4px solid #241005;
+      box-shadow: 0 6px 20px rgba(42, 20, 8, 0.25);
+    }
+    .toolbar-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: #FCD34D;
+    }
+    .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn {
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 8px 18px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.25);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.15s ease;
+    }
+    .btn-pdf {
+      background: linear-gradient(180deg, #22C55E 0%, #15803D 100%);
+      color: #FFFFFF;
+      box-shadow: 0 4px 0 #0D5226;
+    }
+    .btn-doc {
+      background: linear-gradient(180deg, #7A4222 0%, #4E2712 100%);
+      color: #FFFFFF;
+      box-shadow: 0 4px 0 #2D1508;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    .container {
+      max-width: 960px;
+      margin: 30px auto;
+      background: #FFFFFF;
+      padding: 45px 50px;
+      border-radius: 18px;
+      border: 2px solid #542B14;
+      box-shadow: 0 10px 0 #2A1408, 0 18px 35px rgba(42, 20, 8, 0.15);
+    }
+    .doc-header {
+      text-align: center;
+      border-bottom: 3px solid #542B14;
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .doc-header h1 {
+      font-size: 28px;
+      font-weight: 900;
+      color: #2A1408;
+      margin: 0 0 10px 0;
+    }
+    .doc-header .subtitle {
+      font-size: 16px;
+      font-weight: 700;
+      color: #542B14;
+      background: #FDF8F5;
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 8px;
+      border: 1px solid #D6C2B5;
+    }
+    h2 {
+      font-size: 21px;
+      font-weight: 800;
+      color: #FFFFFF;
+      background: linear-gradient(90deg, #542B14 0%, #7A4222 100%);
+      padding: 10px 18px;
+      border-radius: 10px;
+      margin-top: 34px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 0 #241005;
+    }
+    h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #542B14;
+      margin-top: 22px;
+      margin-bottom: 8px;
+      border-right: 4px solid #542B14;
+      padding-right: 10px;
+    }
+    p, li {
+      font-size: 15px;
+      color: #2A1408;
+    }
+    ul, ol {
+      padding-right: 22px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #C4A998;
+      padding: 12px 14px;
+      text-align: right;
+      vertical-align: top;
+    }
+    th {
+      background-color: #542B14;
+      color: #FFFFFF;
+      font-weight: 800;
+    }
+    tr:nth-child(even) {
+      background-color: #FDF8F5;
+    }
+    code, pre {
+      font-family: 'IBM Plex Mono', monospace;
+      direction: ltr;
+      text-align: left;
+      unicode-bidi: embed;
+    }
+    code {
+      background: #F4EAE4;
+      color: #542B14;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    pre {
+      background: #2A1408;
+      color: #FCD34D;
+      padding: 14px 18px;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .highlight-box {
+      background: #FDF8F5;
+      border: 2px solid #542B14;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 18px 0;
+    }
+    .footer-note {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #D6C2B5;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #542B14;
+    }
+    @media print {
+      body {
+        background: #FFFFFF;
+      }
+      .toolbar {
+        display: none !important;
+      }
+      .container {
+        margin: 0;
+        padding: 15px;
+        border: none;
+        box-shadow: none;
+        max-width: 100%;
+      }
+      h2 {
+        color: #2A1408 !important;
+        background: #F4EAE4 !important;
+        border: 1px solid #542B14;
+        box-shadow: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      th {
+        background-color: #542B14 !important;
+        color: #FFFFFF !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <div class="toolbar-title">
+      📄 الوثيقة التقنية والتشغيلية الشاملة — منى تشغيل | Mouna Emploi
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn btn-pdf" onclick="window.print()">
+        🖨️ حفظ كملف PDF الآن (Enregistrer en PDF)
+      </button>
+      <button class="btn btn-doc" onclick="downloadWordDoc()">
+        📥 تحميل بصيغة Word (.doc)
+      </button>
+    </div>
+  </div>
+
+  <div class="container" id="document-content">
+    <div class="doc-header">
+      <h1>الدليل الشامل والمرجع التقني والتشغيلي لمنصة منى تشغيل | Mouna Emploi</h1>
+      <div class="subtitle">
+        وكالة التشغيل المؤقت والتوظيف بالمغرب — دليل التشغيل، البرمجة، وتحديث البيانات من الألف إلى الياء
+      </div>
+      <p style="margin-top: 12px; font-weight: 700;">
+        رقم واتساب الرسمي للوكالة : <span dir="ltr">+212 687422391</span> | البريد الإداري : <code>developpementistes@gmail.com</code>
+      </p>
+    </div>
+
+    <h2>1. نظرة عامة على فكرة المنصة وآلية عملها (Business Logic)</h2>
+    <p>
+      صُممت منصة <strong>منى تشغيل (Mouna Emploi)</strong> لتعمل كوكالة تشغيل مؤقت (Intérim) ذكية ومؤمنة بنسبة 100% في المغرب، وتربط في الوقت الفعلي بين ثلاثة أطراف رئيسية:
+    </p>
+    <ol>
+      <li><strong>المترشح (Candidat Intérimaire)</strong> : ينشئ ملفه المهني، يحدد مهاراته التقنية ومدينته وأجره اليومي بالدرهم، ويترشح لمهام العمل بنقرة واحدة.</li>
+      <li><strong>المشغل / الشركة (Recruteur Entreprise)</strong> : ينشر عروض العمل المؤقتة، يفلتر الكفاءات حسب المهارات التقنية والمدينة والتفرغ، ويتابع الترشيحات.</li>
+      <li><strong>مدير المنصة / الوكالة (Administrateur Mouna Emploi)</strong> : يمتلك الصلاحية الحصرية للوصول إلى <strong>"خزنة البيانات الشخصية السرية (Coffre-Fort PII)"</strong> للربط القانوني والتعاقدي بين الشركات والمترشحين.</li>
+    </ol>
+
+    <div class="highlight-box">
+      <h3>مبدأ السرية وحماية عمولة الوكالة (Anonymisation Anti-PII)</h3>
+      <ul>
+        <li><strong>رموز مستعارة فقط (Alias Codes)</strong> : يتعامل المترشحون والمشغلون داخل المنصة عبر رموز مستعارة مثل <code>CAND-8412</code> للمترشح و <code>REC-9012</code> للمشغل دون كشف هويتهم الحقيقية لبعضهم البعض.</li>
+        <li><strong>عزل البيانات الشخصية في خزنة الإدارة (<code>/user_pii</code>)</strong> : الأسماء القانونية الكاملة، أرقام الهاتف، البريد الإلكتروني، ورقم البطاقة الوطنية أو التعريف الموحد للشركة (<code>CIN / ICE</code>) تُحفظ في جدول معزول في قاعدة البيانات لا يمكن لأي مستخدم عادي قراءته، ويظهر فقط لمدير المنصة (<code>Admin</code>).</li>
+        <li><strong>الفلترة الذكية في المحادثة (<code>sanitizePublicText</code>)</strong> : إذا حاول مترشح أو مشغل كتابة رقم هاتفه أو بريده الإلكتروني داخل الدردشة المباشرة أو في وصف العرض، يقوم النظام تلقائياً بإخفائه واستبداله بعبارة <code>[TÉLÉPHONE MASQUÉ PAR MOUNA EMPLOI]</code>.</li>
+      </ul>
+    </div>
+
+    <h2>2. الهيكلة البرمجية والتقنيات المستخدمة (Architecture Technique)</h2>
+    <h3>أ. الواجهة الأمامية (Frontend)</h3>
+    <ul>
+      <li><strong>React 19 + TypeScript + Vite</strong> : واجهة تفاعلية فائقة السرعة ومتجاوبة بالكامل مع الهواتف الذكية والحواسيب.</li>
+      <li><strong>Tailwind CSS + تصميم ثلاثي الأبعاد متحرك (3D Relief Design)</strong> : خلفية بيضاء نقية (<code>#FFFFFF</code>)، بطاقات وإطارات بنية ثلاثية الأبعاد متحركة (<code>.card-3d-brown</code>)، أزرار بنية بنص أبيض بارز (<code>.btn-3d-brown</code>)، وزر واتساب أخضر ثلاثي الأبعاد (<code>.btn-3d-whatsapp</code>).</li>
+      <li><strong>ثنائية اللغة (Bilingue FR / AR)</strong> : دعم فوري للغتين العربية (<code>RTL</code> بخط Cairo) والفرنسية (<code>LTR</code> بخط Plus Jakarta Sans).</li>
+      <li><strong>Recharts</strong> : لعرض الرسوم البيانية التحليلية لنشاط التوظيف والقطاعات.</li>
+    </ul>
+
+    <h3>ب. الخادم الخلفي (Backend — <code>server.ts</code>)</h3>
+    <ul>
+      <li><strong>Express.js (Node.js)</strong> يعمل على المنفذ <code>3000</code>.</li>
+      <li><strong>البث الفوري للأحداث (Server-Sent Events - SSE)</strong> : عبر المسار <code>/api/realtime/stream</code> و <code>/api/realtime/notify</code> لإرسال إشعارات فورية (Push Notifications) لجميع المتصلين في الوقت الفعلي وتحديث عداد المتصلين.</li>
+      <li><strong>بوابة التحقق من الاشتراكات (<code>/api/billing/checkout</code>)</strong> : للتحقق من بيانات البطاقة البنكية (CMI / Visa) وتفعيل الباقات الشهرية.</li>
+    </ul>
+
+    <h3>ج. قاعدة البيانات والمصادقة (Firebase)</h3>
+    <ul>
+      <li><strong>Firebase Authentication</strong> : تسجيل دخول آمن ومباشر عبر حساب Google.</li>
+      <li><strong>Cloud Firestore</strong> : قاعدة بيانات فورية (<code>Real-time onSnapshot</code>) محمية بقواعد أمان صارمة (<code>firestore.rules</code>).</li>
+    </ul>
+
+    <h2>3. خارطة ملفات المشروع وكيفية عمل كل ملف</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>اسم الملف</th>
+          <th>وظيفته الأساسية</th>
+          <th>متى تحتاج لتعديله؟</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>src/i18n.ts</code></td>
+          <td>يضم جميع النصوص المترجمة (عربي/فرنسي)، قائمة المدن المغربية (<code>MOROCCAN_CITIES</code>)، المهارات التقنية (<code>MOROCCAN_SKILLS</code>)، القطاعات (<code>SECTORS</code>)، وجملة استفسار الواتساب.</td>
+          <td>عند إضافة مدن أو مهارات جديدة، أو تعديل أي نص أو عنوان أو رسالة الواتساب.</td>
+        </tr>
+        <tr>
+          <td><code>src/App.tsx</code></td>
+          <td>المكون الرئيسي للمنصة: يحتوي على جميع الشاشات الـ 8، زر الواتساب، حساب نسبة التوافق، وإدارة الحالة الفورية مع Firestore.</td>
+          <td>عند تعديل واجهة المستخدم، تغيير رقم الواتساب، أو تعديل منطق العرض.</td>
+        </tr>
+        <tr>
+          <td><code>src/seedData.ts</code></td>
+          <td>يحتوي على البيانات المغربية التجريبية التي تُضخ في قاعدة البيانات عند الضغط على زر "تحميل بيانات تجريبية مغربية".</td>
+          <td>لتغيير العروض أو الملفات الافتراضية الأولية.</td>
+        </tr>
+        <tr>
+          <td><code>src/index.css</code></td>
+          <td>يحتوي على تصميم البطاقات والأزرار ثلاثية الأبعاد وألوان المنصة وإعدادات الهواتف.</td>
+          <td>عند الرغبة في تغيير الألوان أو تأثيرات البروز ثلاثي الأبعاد.</td>
+        </tr>
+        <tr>
+          <td><code>src/firebase.ts</code></td>
+          <td>إعداد الاتصال بـ Firebase ودالة فلترة وإخفاء أرقام الهاتف والإيميلات (<code>sanitizePublicText</code>).</td>
+          <td>عند تعديل قواعد الفلترة التلقائية للبيانات الشخصية في الشات.</td>
+        </tr>
+        <tr>
+          <td><code>src/types.ts</code></td>
+          <td>تعريفات هياكل البيانات (Interfaces) لجميع الجداول.</td>
+          <td>عند إضافة حقل جديد لأي جدول.</td>
+        </tr>
+        <tr>
+          <td><code>server.ts</code></td>
+          <td>خادم Express.js للبث الحي للإشعارات ومعالجة الدفع.</td>
+          <td>عند ربط بوابة دفع بنكية خارجية.</td>
+        </tr>
+        <tr>
+          <td><code>firestore.rules</code></td>
+          <td>قواعد الحماية الأمنية لقاعدة بيانات Firestore.</td>
+          <td>عند إضافة صلاحيات جديدة أو تغيير بريد المدير العام.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>4. شرح هيكلة قاعدة البيانات (Collections Firestore)</h2>
+    <ol>
+      <li><strong><code>public_profiles/{userId}</code> (الملفات العامة المجهولة)</strong> : تضم الرمز المستعار (<code>aliasCode</code>)، الدور (<code>candidate</code> | <code>recruiter</code> | <code>admin</code>)، المسمى الوظيفي بالعربية والفرنسية، المدينة، سنوات الخبرة، التفرغ، المهارات، الأجر اليومي بالدرهم، وحالة الاشتراك.</li>
+      <li><strong><code>user_pii/{userId}</code> (خزنة البيانات السرية المعزولة)</strong> : تضم الاسم الكامل القانوني (<code>fullName</code>)، البريد الإلكتروني (<code>email</code>)، رقم الهاتف (<code>phone</code>)، رقم البطاقة الوطنية أو التعريف الضريبي (<code>cinOrIce</code>)، اسم الشركة (<code>companyLegalName</code>)، والعنوان الدقيق (<code>exactAddress</code>). لا يقرأه إلا صاحب الحساب أو المدير العام.</li>
+      <li><strong><code>jobs/{jobId}</code> (عروض ومهام العمل المؤقت)</strong> : تضم عنوان العرض بالفرنسية والعربية، القطاع، المدينة، نوع العقد، المدة بالأسابيع، الراتب الشهري بالدرهم (<code>salaryMad</code>)، والمهارات المطلوبة.</li>
+      <li><strong><code>applications/{applicationId}</code> (طلبات الترشيح)</strong> : تربط بين المترشح والعرض والمشغل، وتحسب تلقائياً نسبة التوافق المئوية (<code>matchScore</code>)، وتتابع حالة الطلب.</li>
+      <li><strong><code>chats/{threadId}</code> ورسائلها <code>messages</code></strong> : تفتح محادثة آمنة ومجهولة الهوية بين المشغل والمترشح بمجرد الترشح للوظيفة.</li>
+      <li><strong><code>notifications/{notificationId}</code> (الإشعارات الفورية)</strong> : تحفظ تنبيهات كل مستخدم وتعرضها في درج الإشعارات العلوي.</li>
+      <li><strong><code>subscriptions/{subscriptionId}</code> (سجل الاشتراكات الشهرية)</strong> : يوثق اشتراكات الباقات الشهرية (99 درهم للمترشح، 490 درهم للمشغل، 1490 درهم للمجموعات الكبرى).</li>
+    </ol>
+
+    <h2>5. طريقة تشغيل المنصة واستخدامها اليومي</h2>
+    <ul>
+      <li><strong>التبديل بين العربية والفرنسية</strong> : اضغط على زر اللغة (العربية / Français) في الشريط الجانبي (أو الشريط الأفقي على الهاتف) لتتحول المنصة بالكامل مع اتجاه النص (RTL / LTR).</li>
+      <li><strong>زر التواصل عبر واتساب (<code>212 687422391</code>)</strong> : يقع مباشرة تحت اسم <strong>Mouna Emploi · منى تشغيل</strong> باللون الأخضر ثلاثي الأبعاد. عند نقره، يفتح تطبيق واتساب مباشرة مع رسالة استفسار جاهزة باللغة التي يتصفح بها المستخدم حالياً.</li>
+      <li><strong>تسجيل الدخول وصلاحية المدير العام (Admin)</strong> : اضغط على "تسجيل الدخول الآمن عبر Google". عند الدخول ببريدك الإداري (<code>developpementistes@gmail.com</code>)، يمنحك النظام تلقائياً صلاحية مدير عام ويفتح لك تبويب "خزنة البيانات السرية (للإدارة)".</li>
+      <li><strong>زر "تحميل بيانات تجريبية مغربية"</strong> : يظهر في لوحة التحليلات بعد تسجيل الدخول، ويسمح لك بملء قاعدة البيانات بعروض عمل وملفات كفاءات مغربية حقيقية بنقرة واحدة.</li>
+    </ul>
+
+    <h2>6. كيفية تحديث المعطيات والبيانات (من الألف إلى الياء)</h2>
+    <h3>أولاً: التحديث المباشر من واجهة المنصة (بدون تعديل الكود)</h3>
+    <ul>
+      <li><strong>نشر عرض عمل جديد</strong> : من الزر العلوي "نشر عرض عمل جديد" ← املأ بيانات العرض باللغتين وحدد المهارات والراتب ← يُنشر العرض فوراً لجميع المتصلين.</li>
+      <li><strong>تعديل الملف المهني والبيانات السرية (PII)</strong> : من تبويب "ملفي والخصوصية" ← عدّل مهاراتك وأجرك اليومي في البطاقة الأولى، وعدّل اسمك القانوني ورقم هاتفك وبطاقتك الوطنية CIN / ICE في البطاقة الثانية ← اضغط "حفظ التغييرات".</li>
+      <li><strong>إدارة حالة الترشيحات</strong> : من تبويب "تتبع الترشيحات" ← اضغط على أزرار تغيير الحالة (مقبول أولياً، مقابلة عمل، تم التعاقد، مرفوض) ليتم التحديث فوراً في قاعدة البيانات مع إرسال إشعار حي للمترشح.</li>
+    </ul>
+
+    <h3>ثانياً: تحديث المعطيات الثابتة في الكود البرمجي</h3>
+    <p><strong>1. تحديث قائمة المدن المغربية، المهارات، أو القطاعات :</strong> افتح الملف <code>src/i18n.ts</code> (من السطر 3 إلى 42) وأضف أي مدينة في <code>MOROCCAN_CITIES</code> أو مهارة في <code>MOROCCAN_SKILLS</code>.</p>
+    <p><strong>2. تحديث رقم الواتساب أو جملة الاستفسار التلقائية :</strong></p>
+    <ul>
+      <li>لتعديل جملة الاستفسار: افتح <code>src/i18n.ts</code> وعدّل قيمة <code>whatsappInquiryText</code> في قسم اللغة الفرنسية وقسم اللغة العربية.</li>
+      <li>لتعديل رقم الهاتف: افتح <code>src/App.tsx</code> وابحث عن <code>212687422391</code> لتحديث الرابط والرقم المعروض.</li>
+    </ul>
+    <p><strong>3. تغيير البريد الإلكتروني للمدير العام (Admin) :</strong> في <code>src/App.tsx</code> عدّل قيمة <code>BOOTSTRAP_ADMIN_EMAIL</code>، وفي <code>firestore.rules</code> حدّث البريد داخل دالة <code>isAdmin()</code>.</p>
+
+    <h2>7. أوامر التشغيل والبناء (للعمل المحلي أو النشر على الخادم)</h2>
+    <pre>
+npm install       # تثبيت جميع الحزم البرمجية
+npm run dev       # تشغيل خادم التطوير المحلي على المنفذ 3000
+npm run lint      # التحقق من سلامة الكود البرمجي (TypeScript)
+npm run build     # بناء نسخة الإنتاج النهائية
+npm start         # تشغيل خادم الإنتاج النهائي</pre>
+
+    <div class="footer-note">
+      وثيقة مرجعية رسمية — منصة منى تشغيل | Mouna Emploi — جميع الحقوق محفوظة ©
+    </div>
+  </div>
+
+  <script>
+    function downloadWordDoc() {
+      var content = document.getElementById('document-content').innerHTML;
+      var htmlDocument =
+        '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+        'xmlns:w="urn:schemas-microsoft-com:office:word" ' +
+        'xmlns="http://www.w3.org/TR/REC-html40" lang="ar" dir="rtl">' +
+        '<head><meta charset="utf-8"><title>Mouna Emploi Guide</title>' +
+        '<style>body { font-family: Arial, sans-serif; direction: rtl; text-align: right; line-height: 1.6; } ' +
+        'table { width: 100%; border-collapse: collapse; margin: 15px 0; } ' +
+        'th, td { border: 1px solid #542B14; padding: 8px; text-align: right; } ' +
+        'th { background: #542B14; color: #ffffff; } ' +
+        'h1, h2, h3 { color: #542B14; }</style></head>' +
+        '<body>' + content + '</body></html>';
+
+      var blob = new Blob(['\ufeff', htmlDocument], {
+        type: 'application/msword'
+      });
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement('a');
+      link.href = url;
+      link.download = 'Guide-Complet-Mouna-Emploi-AR.doc';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>

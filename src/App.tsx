@@ -72,6 +72,7 @@ import {
   PushNotification,
 } from './types';
 import { seedMoroccanInterimData } from './seedData';
+import { generateAndDownloadArabicGuidePdf } from './pdfGuideGenerator';
 
 type ActiveTab =
   | 'dashboard'
@@ -1131,7 +1132,7 @@ export default function App() {
         userAlias: myProfile.aliasCode,
         planId: checkoutPlan.id,
         amountMad: checkoutPlan.priceMad,
-        billingCycle: 'monthly',
+        billingCycle: 'annual',
         status: 'active',
         paymentMethodLast4: data.paymentMethodLast4,
         createdAt: serverTimestamp(),
@@ -1149,14 +1150,14 @@ export default function App() {
         'subscription',
         `Abonnement ${checkoutPlan.name} activé`,
         `تم تفعيل اشتراك ${checkoutPlan.name}`,
-        `Mise en relation prioritaire active (${checkoutPlan.priceMad} MAD/mois)`,
-        `أولوية الربط المهني مفعلة (${checkoutPlan.priceMad} درهم/شهر)`
+        `Mise en relation prioritaire active (${checkoutPlan.priceMad} MAD/an)`,
+        `أولوية الربط المهني مفعلة (${checkoutPlan.priceMad} درهم/سنة)`
       );
 
       setCheckoutStatus(
         lang === 'fr'
-          ? `Paiement confirmé (${data.transactionRef}) — Abonnement mensuel actif !`
-          : `تم تأكيد الدفع (${data.transactionRef}) — اشتراككم الشهري نشط!`
+          ? `Paiement confirmé (${data.transactionRef}) — Abonnement annuel actif !`
+          : `تم تأكيد الدفع (${data.transactionRef}) — اشتراككم السنوي نشط!`
       );
       setTimeout(() => {
         setCheckoutPlan(null);
@@ -1207,6 +1208,17 @@ export default function App() {
   );
 
   const unreadNotifCount = notifications.filter((n) => !n.read).length;
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState<boolean>(false);
+
+  const handleDownloadCompleteGuide = async () => {
+    if (isGeneratingPdf) return;
+    setIsGeneratingPdf(true);
+    try {
+      await generateAndDownloadArabicGuidePdf();
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
 
   const navItems = [
     { id: 'dashboard' as const, label: t.navDashboard, icon: TrendingUp },
@@ -1299,6 +1311,21 @@ export default function App() {
 
         {/* Zone 3: Primary Action (3D Animated Brown Button with White Text) */}
         <div className="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={handleDownloadCompleteGuide}
+            disabled={isGeneratingPdf}
+            className="btn-3d-brown flex items-center gap-1.5 px-2.5 sm:px-3.5 py-2 text-xs font-bold rounded-lg whitespace-nowrap shrink-0 cursor-pointer"
+          >
+            <FileText className="w-3.5 h-3.5 text-white shrink-0" />
+            <span>
+              {isGeneratingPdf
+                ? 'PDF...'
+                : lang === 'fr'
+                ? 'Télécharger PDF'
+                : 'تحميل PDF'}
+            </span>
+          </button>
           {user ? (
             <button
               onClick={() => setShowCreateJobModal(true)}
@@ -2456,7 +2483,7 @@ export default function App() {
                       name: t.planCandidateName,
                       audience: t.planCandidateAudience,
                       priceText: t.planCandidatePrice,
-                      priceMad: 99,
+                      priceMad: 100,
                       features: [
                         'Dossier placé en tête des recherches recruteurs',
                         'Alertes Push instantanées dès publication d’offre',
@@ -2469,7 +2496,7 @@ export default function App() {
                       name: t.planRecruiterName,
                       audience: t.planRecruiterAudience,
                       priceText: t.planRecruiterPrice,
-                      priceMad: 490,
+                      priceMad: 400,
                       features: [
                         'Jusqu’à 25 missions prioritaires simultanées',
                         'Algorithme de présélection par compétences techniques',
@@ -2482,7 +2509,7 @@ export default function App() {
                       name: t.planEnterpriseName,
                       audience: t.planEnterpriseAudience,
                       priceText: t.planEnterprisePrice,
-                      priceMad: 1490,
+                      priceMad: 800,
                       features: [
                         'Missions illimitées multi-sites (Casa, Tanger, Kénitra)',
                         'Gestionnaire de compte Mouna Emploi dédié',
@@ -3066,7 +3093,7 @@ export default function App() {
                   type="submit"
                   className="btn-3d-brown px-4 py-2 font-semibold rounded-xl cursor-pointer"
                 >
-                  Confirmer {checkoutPlan.priceMad} MAD/mois
+                  Confirmer {checkoutPlan.priceMad} MAD / {lang === 'fr' ? 'an' : 'سنة'}
                 </button>
               </div>
             </form>
